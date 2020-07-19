@@ -25,3 +25,9 @@ variable "plan" {
   description = "The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)"
   default     = "7-day"
 }
+
+variable "provision" {
+  type        = bool
+  description = "Flag indicating that the instance should be provisioned"
+  default     = false
+}

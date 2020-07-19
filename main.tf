@@ -12,6 +12,7 @@ locals {
 }
 
 resource "ibm_resource_instance" "at_instance" {
+  count             = var.provision ? 1 : 0
   name              = "${replace(local.name_prefix, "/[^a-zA-Z0-9_\\-\\.]/", "")}-activity-tracker"
   service           = "logdnaat"
   plan              = var.plan
