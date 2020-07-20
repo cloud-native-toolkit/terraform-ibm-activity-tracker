@@ -40,7 +40,7 @@ variable "cluster_exists" {
 variable "name_prefix" {
   type        = string
   description = "Prefix name that should be used for the cluster and services. If not provided then resource_group_name will be used"
-  default     = ""
+  default     = "garage-devops"
 }
 
 variable "vpc_cluster" {
