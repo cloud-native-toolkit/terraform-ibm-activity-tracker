@@ -1,0 +1,20 @@
+name: ibm-activity-tracker
+type: terraform
+description: Provisions the IBM Cloud hosted Activity Tracker service
+tags:
+    - sre
+    - account
+    - ibm cloud
+    - activity tracker
+versions:
+- platforms: []
+  dependencies: []
+  variables:
+    - name: resource_group_name
+      scope: global
+    - name: resource_location
+      scope: global
+      alias: region
+    - name: name_prefix
+      scope: global
+
