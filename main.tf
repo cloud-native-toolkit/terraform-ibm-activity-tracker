@@ -1,5 +1,5 @@
 provider "ibm" {
-  version = ">= 1.2.1"
+  version = ">= 1.5.3"
 }
 
 data "ibm_resource_group" "tools_resource_group" {
