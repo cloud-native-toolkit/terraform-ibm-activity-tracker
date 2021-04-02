@@ -8,10 +8,16 @@ tags:
     - activity tracker
 versions:
 - platforms: []
-  dependencies: []
+  dependencies:
+    - id: resource_group
+      refs:
+        - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
+          version: ">= 2.1.0"
   variables:
     - name: resource_group_name
-      scope: global
+      moduleRef:
+        id: resource_group
+        output: name
     - name: resource_location
       scope: global
       alias: region
