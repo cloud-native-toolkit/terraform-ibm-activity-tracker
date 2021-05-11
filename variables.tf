@@ -31,3 +31,9 @@ variable "provision" {
   description = "Flag indicating that the instance should be provisioned"
   default     = false
 }
+
+variable "label" {
+  type        = string
+  description = "Label used to build the resource name if one is not provided."
+  default     = "activity-tracker"
+}
