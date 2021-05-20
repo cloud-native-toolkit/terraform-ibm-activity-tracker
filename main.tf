@@ -12,7 +12,6 @@ data ibm_resource_group resource_group {
 }
 
 locals {
-  name_prefix = var.name_prefix != "" ? var.name_prefix : var.resource_group_name
   name        = "activity-tracker-${var.resource_location}"
   service     = "logdnaat"
 }
