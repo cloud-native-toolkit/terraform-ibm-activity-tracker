@@ -14,12 +14,6 @@ variable "tags" {
   default     = []
 }
 
-variable "name_prefix" {
-  type        = string
-  description = "The prefix name for the service. If not provided it will default to the resource group name"
-  default     = ""
-}
-
 variable "plan" {
   type        = string
   description = "The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)"
@@ -30,10 +24,4 @@ variable "provision" {
   type        = bool
   description = "Flag indicating that the instance should be provisioned"
   default     = false
-}
-
-variable "label" {
-  type        = string
-  description = "Label used to build the resource name if one is not provided."
-  default     = "activity-tracker"
 }
