@@ -33,6 +33,6 @@ output "service" {
 
 output "label" {
   description = "The label for the instance"
-  value       = var.label
+  value       = var.resource_location
   depends_on = [data.ibm_resource_instance.instance]
 }
