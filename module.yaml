@@ -8,6 +8,9 @@ tags:
     - activity tracker
 versions:
 - platforms: []
+  providers:
+    - name: ibm
+      source: "ibm-cloud/ibm"
   dependencies:
     - id: resource_group
       refs:
@@ -26,4 +29,3 @@ versions:
     - name: provision
       scope: module
       defaultValue: true
-
