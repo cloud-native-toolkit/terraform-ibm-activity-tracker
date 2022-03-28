@@ -24,3 +24,8 @@ versions:
     - name: resource_location
       scope: global
       alias: region
+    - name: name_prefix
+      scope: global
+    - name: provision
+      scope: module
+      defaultValue: true
