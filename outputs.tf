@@ -10,7 +10,7 @@ output "guid" {
 
 output "name" {
   value       = local.name
-  depends_on  = [ibm_resource_instance.at_instance]
+  depends_on  = [null_resource.at_instance]
   description = "The name of the provisioned instance."
 }
 
