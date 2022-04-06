@@ -25,3 +25,9 @@ variable "plan" {
   default     = "7-day"
 }
 
+variable "sync" {
+  type        = string
+  description = "Value used to order the provisioning of the instance"
+  default     = ""
+}
+
