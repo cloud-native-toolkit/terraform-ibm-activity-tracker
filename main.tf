@@ -83,7 +83,7 @@ data ibm_resource_instance instance {
   depends_on = [null_resource.at_instance, data.local_file.at_instance_results]
 
   name              = jsondecode(data.local_file.at_instance_results.content).name
-  resource_group_id = data.ibm_resource_group.resource_group.id
-  location          = var.resource_location
+  resource_group_id = jsondecode(data.local_file.at_instance_results.content).resource_group_id
+  location          = jsondecode(data.local_file.at_instance_results.content).region_id
   service           = local.service
 }

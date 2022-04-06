@@ -47,6 +47,5 @@ if [ "$COUNT" -gt "0" ]; then
   fi
 else
   echo "Activity Tracker instance not found"
-  exit 1;
 fi
 
