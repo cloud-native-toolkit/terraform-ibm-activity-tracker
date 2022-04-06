@@ -32,6 +32,7 @@ resource null_resource at_instance {
     SERVICE = local.service
     ACTIVITY_TRACKER_CATALOG_ID = local.service_catalog_id
     IBMCLOUD_API_KEY = base64encode(var.ibmcloud_api_key)
+    REGION = var.resource_location
     RESOURCE_GROUP_ID  = data.ibm_resource_group.resource_group.id
     AUTOMATION_TAG  = "automation:${random_uuid.tag.result}"
     BIN_DIR = module.clis.bin_dir
@@ -45,6 +46,7 @@ resource null_resource at_instance {
       SERVICE = self.triggers.SERVICE
       ACTIVITY_TRACKER_CATALOG_ID = self.triggers.ACTIVITY_TRACKER_CATALOG_ID
       IBMCLOUD_API_KEY = base64decode(self.triggers.IBMCLOUD_API_KEY)
+      REGION = self.triggers.REGION
       RESOURCE_GROUP_ID  = self.triggers.RESOURCE_GROUP_ID
       AUTOMATION_TAG  = self.triggers.AUTOMATION_TAG
       BIN_DIR = self.triggers.BIN_DIR
@@ -59,6 +61,7 @@ resource null_resource at_instance {
       SERVICE = self.triggers.SERVICE
       ACTIVITY_TRACKER_CATALOG_ID = self.triggers.ACTIVITY_TRACKER_CATALOG_ID
       IBMCLOUD_API_KEY = base64decode(self.triggers.IBMCLOUD_API_KEY)
+      REGION = self.triggers.REGION
       RESOURCE_GROUP_ID  = self.triggers.RESOURCE_GROUP_ID
       AUTOMATION_TAG  = self.triggers.AUTOMATION_TAG
       BIN_DIR = self.triggers.BIN_DIR
