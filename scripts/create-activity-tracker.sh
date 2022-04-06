@@ -20,7 +20,7 @@ ACCOUNT_ID=$(curl -s -X GET 'https://iam.cloud.ibm.com/v1/apikeys/details' \
 
 REGIONS=""
 
-url="/v2/resource_instances?type=service_instance"
+url="/v2/resource_instances?type=service_instance&resource_id=$ACTIVITY_TRACKER_CATALOG_ID"
 while [ "$url" != "null" ]
 do
   #echo $url
@@ -31,13 +31,23 @@ do
   if [ ! -z "$var" ]; then
     REGIONS=",$REGIONS"
   fi
-  REGIONS="$(echo $RESULT | jq ".resources[] | select( .id | contains(\"$SERVICE\") ).region_id" -r)$REGIONS"
+  REGIONS="$(echo $RESULT | jq ".resources[].region_id" -r)$REGIONS"
   url=$(echo "$RESULT" | jq '.next_url' -r )
 done
 
-
 if [[ "$REGIONS" == *"$REGION"* ]]; then
   echo "An activity tracker instance already exists in the $REGION region".
+
+  RESULT=$(curl -s -X GET "https://resource-controller.cloud.ibm.com/v2/resource_instances?type=service_instance&resource_id=$ACTIVITY_TRACKER_CATALOG_ID" \
+      --header "Authorization: Bearer $IAM_TOKEN" \
+      --header 'Content-Type: application/json')
+
+  INSTANCE="$(echo "$RESULT" | jq ".resources[] | select( .region_id | contains(\"$REGIONS\") )" -r)"
+
+  echo $INSTANCE > creation-output.json
+
+  echo $INSTANCE
+
 else
   PLANS=$(curl -s -X GET \
     --url "https://globalcatalog.cloud.ibm.com/api/v1/$ACTIVITY_TRACKER_CATALOG_ID/*?include=metadata.plan" \
@@ -46,7 +56,7 @@ else
 
   PLAN_ID=$(echo "$PLANS" | jq '.resources[] | select(.name=="7-day").id' -r)
 
-  curl -s -X POST https://resource-controller.cloud.ibm.com/v2/resource_instances \
+  RESULT=$(curl -s -X POST https://resource-controller.cloud.ibm.com/v2/resource_instances \
     -d '{
       "name": "'$INSTANCE_NAME'",
       "target": "'$REGION'",
@@ -55,7 +65,11 @@ else
       "tags": ["'$AUTOMATION_TAG'"]
     }' \
     --header "Authorization: Bearer $IAM_TOKEN" \
-    --header 'Content-Type: application/json' | jq
+    --header 'Content-Type: application/json')
+
+  echo "$RESULT"
+
+  echo "$RESULT" > creation-output.json
 
 
 fi
