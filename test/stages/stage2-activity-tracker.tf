@@ -3,5 +3,5 @@ module "dev_activity_tracker" {
 
   resource_group_name      = module.resource_group.name
   resource_location        = "eu-gb"
-  provision                = true
+  ibmcloud_api_key         = var.ibmcloud_api_key
 }
