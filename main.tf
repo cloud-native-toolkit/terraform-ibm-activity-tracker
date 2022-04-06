@@ -67,9 +67,22 @@ resource null_resource at_instance {
 }
 
 
-data ibm_resource_instance instance {
-  depends_on = [ibm_resource_instance.at_instance]
 
+data "local_file" "at_instance_results" {
+  depends_on = [null_resource.at_instance]
+  filename = "creation-output.json"
+}
+
+resource null_resource print_found {
+  provisioner "local-exec" {
+    command = "echo 'AT instance found: ${data.local_file.at_instance_results.content}'"
+  }
+}
+
+data ibm_resource_instance instance {
+  depends_on = [null_resource.at_instance, data.local_file.at_instance_results]
+
+  name              = jsondecode(data.local_file.at_instance_results.content).name
   resource_group_id = data.ibm_resource_group.resource_group.id
   location          = var.resource_location
   service           = local.service
