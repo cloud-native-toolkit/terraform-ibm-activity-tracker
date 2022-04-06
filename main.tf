@@ -39,7 +39,7 @@ resource null_resource at_instance {
 
   provisioner "local-exec" {
     when        = create
-    command = "${path.module}/scripts/create-resource-group.sh"
+    command = "${path.module}/scripts/create-activity-tracker.sh"
     environment = {
       INSTANCE_NAME = self.triggers.INSTANCE_NAME
       SERVICE = self.triggers.SERVICE
@@ -53,7 +53,7 @@ resource null_resource at_instance {
 
   provisioner "local-exec" {
     when        = destroy
-    command = "${path.module}/scripts/delete-resource-group.sh"
+    command = "${path.module}/scripts/delete-activity-tracker.sh"
     environment = {
       INSTANCE_NAME = self.triggers.INSTANCE_NAME
       SERVICE = self.triggers.SERVICE
