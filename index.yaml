@@ -31,6 +31,68 @@ versions:
         description: Geographic location of the resource (e.g. us-south, us-east)
       - name: name_prefix
         scope: global
+      - name: sync
+        moduleRef:
+          id: sync
+          output: sync
+        type: string
+        description: Value used to order the provisioning of the instance
+        default: ""
+        optional: true
+      - name: ibmcloud_api_key
+        type: string
+        description: The IBM Cloud api key
+      - name: tags
+        type: list(string)
+        description: Tags that should be applied to the service
+        default: []
+        optional: true
+      - name: plan
+        type: string
+        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        default: 7-day
+        optional: true
+    version: v2.4.3
+    outputs:
+      - name: id
+        description: The id of the provisioned instance.
+      - name: guid
+        description: The id of the provisioned instance.
+      - name: name
+        description: The name of the provisioned instance.
+      - name: crn
+        description: The id of the provisioned instance
+      - name: location
+        description: The location of the provisioned instance
+      - name: service
+        description: The service name of the key provisioned for the instance
+      - name: label
+        description: The label for the instance
+      - name: sync
+        description: Value used to order the provisioning of the instance
+  - platforms: []
+    providers:
+      - name: ibm
+        source: "ibm-cloud/ibm"
+    dependencies:
+      - id: resource_group
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
+            version: ">= 2.1.0"
+    variables:
+      - name: resource_group_name
+        moduleRef:
+          id: resource_group
+          output: name
+        type: string
+        description: Resource group where the cluster has been provisioned.
+      - name: resource_location
+        scope: global
+        alias: region
+        type: string
+        description: Geographic location of the resource (e.g. us-south, us-east)
+      - name: name_prefix
+        scope: global
       - name: provision
         scope: module
         defaultValue: true
