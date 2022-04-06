@@ -11,32 +11,82 @@ data ibm_resource_group resource_group {
   name = var.resource_group_name
 }
 
+module "clis" {
+  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
+}
+
+resource "random_uuid" "tag" {
+}
+
 locals {
   name        = "activity-tracker-${var.resource_location}"
   service     = "logdnaat"
+  service_catalog_id = "dcc46a60-e13b-11e8-a015-757410dab16b"
 }
 
-resource ibm_resource_instance at_instance {
-  count             = var.provision ? 1 : 0
-  name              = local.name
-  service           = local.service
-  plan              = var.plan
-  location          = var.resource_location
-  resource_group_id = data.ibm_resource_group.resource_group.id
-  tags              = var.tags
+resource null_resource at_instance {
+  depends_on = [null_resource.print_names, module.clis]
 
-  timeouts {
-    create = "15m"
-    update = "15m"
-    delete = "15m"
+  triggers = {
+    INSTANCE_NAME = local.name
+    SERVICE = local.service
+    ACTIVITY_TRACKER_CATALOG_ID = local.service_catalog_id
+    IBMCLOUD_API_KEY = base64encode(var.ibmcloud_api_key)
+    REGION = var.resource_location
+    RESOURCE_GROUP_ID  = data.ibm_resource_group.resource_group.id
+    AUTOMATION_TAG  = "automation:${random_uuid.tag.result}"
+    BIN_DIR = module.clis.bin_dir
+  }
+
+  provisioner "local-exec" {
+    when        = create
+    command = "${path.module}/scripts/create-activity-tracker.sh"
+    environment = {
+      INSTANCE_NAME = self.triggers.INSTANCE_NAME
+      SERVICE = self.triggers.SERVICE
+      ACTIVITY_TRACKER_CATALOG_ID = self.triggers.ACTIVITY_TRACKER_CATALOG_ID
+      IBMCLOUD_API_KEY = base64decode(self.triggers.IBMCLOUD_API_KEY)
+      REGION = self.triggers.REGION
+      RESOURCE_GROUP_ID  = self.triggers.RESOURCE_GROUP_ID
+      AUTOMATION_TAG  = self.triggers.AUTOMATION_TAG
+      BIN_DIR = self.triggers.BIN_DIR
+    }
+  }
+
+  provisioner "local-exec" {
+    when        = destroy
+    command = "${path.module}/scripts/delete-activity-tracker.sh"
+    environment = {
+      INSTANCE_NAME = self.triggers.INSTANCE_NAME
+      SERVICE = self.triggers.SERVICE
+      ACTIVITY_TRACKER_CATALOG_ID = self.triggers.ACTIVITY_TRACKER_CATALOG_ID
+      IBMCLOUD_API_KEY = base64decode(self.triggers.IBMCLOUD_API_KEY)
+      REGION = self.triggers.REGION
+      RESOURCE_GROUP_ID  = self.triggers.RESOURCE_GROUP_ID
+      AUTOMATION_TAG  = self.triggers.AUTOMATION_TAG
+      BIN_DIR = self.triggers.BIN_DIR
+    }
+  }
+}
+
+
+
+data "local_file" "at_instance_results" {
+  depends_on = [null_resource.at_instance]
+  filename = "creation-output.json"
+}
+
+resource null_resource print_found {
+  provisioner "local-exec" {
+    command = "echo 'AT instance found: ${data.local_file.at_instance_results.content}'"
   }
 }
 
 data ibm_resource_instance instance {
-  depends_on = [ibm_resource_instance.at_instance]
+  depends_on = [null_resource.at_instance, data.local_file.at_instance_results]
 
-  name              = local.name
-  resource_group_id = data.ibm_resource_group.resource_group.id
-  location          = var.resource_location
+  name              = jsondecode(data.local_file.at_instance_results.content).name
+  resource_group_id = jsondecode(data.local_file.at_instance_results.content).resource_group_id
+  location          = jsondecode(data.local_file.at_instance_results.content).region_id
   service           = local.service
 }

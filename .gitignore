@@ -1,2 +1,11 @@
 .idea/
 *.iml
+
+
+test/stages/.terraform
+test/stages/.terraform.lock.hcl
+test/stages/*.tfstate*
+test/stages/bin2
+test/stages/module
+
+creation-output.json

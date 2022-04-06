@@ -1,3 +1,8 @@
+variable "ibmcloud_api_key" {
+  type        = string
+  description = "The IBM Cloud api key"
+}
+
 variable "resource_group_name" {
   type        = string
   description = "Resource group where the cluster has been provisioned."
@@ -20,8 +25,3 @@ variable "plan" {
   default     = "7-day"
 }
 
-variable "provision" {
-  type        = bool
-  description = "Flag indicating that the instance should be provisioned"
-  default     = false
-}
