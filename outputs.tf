@@ -9,7 +9,7 @@ output "guid" {
 }
 
 output "name" {
-  value       = local.name
+  value       = data.ibm_resource_instance.instance.name
   depends_on  = [null_resource.at_instance]
   description = "The name of the provisioned instance."
 }
@@ -39,6 +39,6 @@ output "label" {
 
 output "sync" {
   description = "Value used to order the provisioning of the instance"
-  value       = var.resource_group_name
+  value       = data.ibm_resource_instance.instance.name
   depends_on  = [data.ibm_resource_instance.instance]
 }
