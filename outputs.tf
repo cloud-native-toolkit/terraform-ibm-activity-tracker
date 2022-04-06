@@ -36,3 +36,9 @@ output "label" {
   value       = var.resource_location
   depends_on = [data.ibm_resource_instance.instance]
 }
+
+output "sync" {
+  description = "Value used to order the provisioning of the instance"
+  value       = var.resource_group_name
+  depends_on  = [data.ibm_resource_instance.instance]
+}
