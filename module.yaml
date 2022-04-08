@@ -35,3 +35,5 @@ versions:
       moduleRef:
         id: sync
         output: sync
+    - name: ibmcloud_api_key
+      scope: global
