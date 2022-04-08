@@ -11,12 +11,77 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
+      - id: sync
+        refs: []
+        interface: github.com/cloud-native-toolkit/automation-modules#sync
+        manualResolution: true
+        optional: true
+    variables:
+      - name: ibmcloud_api_key
+        type: string
+        description: The IBM Cloud api key
+        scope: global
+      - name: resource_group_name
+        type: string
+        description: Resource group where the cluster has been provisioned.
+        moduleRef:
+          id: resource_group
+          output: name
+      - name: resource_location
+        type: string
+        description: Geographic location of the resource (e.g. us-south, us-east)
+        scope: global
+        alias: region
+      - name: tags
+        type: list(string)
+        description: Tags that should be applied to the service
+        default: []
+      - name: plan
+        type: string
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
+        default: 7-day
+      - name: sync
+        type: string
+        description: Value used to order the provisioning of the instance
+        default: ''
+        moduleRef:
+          id: sync
+          output: sync
+    version: v2.4.6
+    outputs:
+      - name: id
+        description: The id of the provisioned instance.
+      - name: guid
+        description: The id of the provisioned instance.
+      - name: name
+        description: The name of the provisioned instance.
+      - name: crn
+        description: The id of the provisioned instance
+      - name: location
+        description: The location of the provisioned instance
+      - name: service
+        description: The service name of the key provisioned for the instance
+      - name: label
+        description: The label for the instance
+      - name: sync
+        description: Value used to order the provisioning of the instance
+  - platforms: []
+    providers:
+      - name: ibm
+        source: ibm-cloud/ibm
+    dependencies:
+      - id: resource_group
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
+            version: '>= 2.1.0'
       - id: sync
         refs: []
         interface: github.com/cloud-native-toolkit/automation-modules#sync
@@ -42,7 +107,7 @@ versions:
           output: sync
         type: string
         description: Value used to order the provisioning of the instance
-        default: ""
+        default: ''
         optional: true
       - name: ibmcloud_api_key
         scope: global
@@ -55,7 +120,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
     version: v2.4.5
@@ -79,12 +146,12 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
       - id: sync
         refs: []
         interface: github.com/cloud-native-toolkit/automation-modules#sync
@@ -110,7 +177,7 @@ versions:
           output: sync
         type: string
         description: Value used to order the provisioning of the instance
-        default: ""
+        default: ''
         optional: true
       - name: ibmcloud_api_key
         type: string
@@ -122,7 +189,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
     version: v2.4.4
@@ -146,12 +215,12 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -172,7 +241,7 @@ versions:
           output: sync
         type: string
         description: Value used to order the provisioning of the instance
-        default: ""
+        default: ''
         optional: true
       - name: ibmcloud_api_key
         type: string
@@ -184,7 +253,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
     version: v2.4.3
@@ -208,12 +279,12 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -241,13 +312,15 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: sync
         type: string
         description: Value used to order the provisioning of the instance
-        default: ""
+        default: ''
         optional: true
     version: v2.4.2
     outputs:
@@ -270,12 +343,12 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -303,7 +376,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
     version: v2.4.1
@@ -325,12 +400,12 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -350,7 +425,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -379,7 +456,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -399,7 +476,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -428,7 +507,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -444,8 +523,10 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: tags
         type: list(string)
@@ -454,7 +535,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -488,7 +571,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -504,8 +587,10 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: tags
         type: list(string)
@@ -514,7 +599,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -528,7 +615,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -544,8 +631,10 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: tags
         type: list(string)
@@ -554,7 +643,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -568,7 +659,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -584,8 +675,10 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: tags
         type: list(string)
@@ -594,7 +687,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -618,8 +713,10 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: tags
         type: list(string)
@@ -628,7 +725,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         default: 7-day
         optional: true
       - name: provision
@@ -652,7 +751,9 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
         optional: true
       - name: tags
         type: list(string)
@@ -660,7 +761,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         optional: true
       - name: provision
         type: bool
@@ -683,7 +786,9 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
         optional: true
       - name: tags
         type: list(string)
@@ -691,7 +796,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)
+        description: >-
+          The type of plan the service instance should run under (lite, 7-day,
+          14-day, or 30-day)
         optional: true
       - name: provision
         type: bool
