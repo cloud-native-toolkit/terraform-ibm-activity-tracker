@@ -6,14 +6,15 @@ PATH=$BIN_DIR:$PATH
 JQ="$BIN_DIR/jq"
 
 
+# uses a semaphore to mitigate parallel execution problems
 SEMAPHORE="activity-tracker.semaphore"
 
 while true; do
   echo "Checking for semaphore"
   if [[ ! -f "${SEMAPHORE}" ]]; then
-    echo -n "ActivityTracker $REGION" > "${SEMAPHORE}"
+    echo -n "ActivityTracker $REGION $INSTANCE_NAME" > "${SEMAPHORE}"
 
-    if [[ $(cat ${SEMAPHORE}) == "ActivityTracker $REGION" ]]; then
+    if [[ $(cat ${SEMAPHORE}) == "ActivityTracker $REGION $INSTANCE_NAME" ]]; then
       echo "Got the semaphore. Creating activity tracker instance"
       break
     fi
