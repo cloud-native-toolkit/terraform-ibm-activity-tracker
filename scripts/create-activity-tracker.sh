@@ -88,16 +88,18 @@ if [[ ! "$REGIONS" == *"$REGION"* ]]; then
     echo "$RESULT" > creation-output.json
     exit 0
   elif [[ "$RESULT" == *"This region already has an instance"* ]]; then
+    echo "AT instance found."
     #do nothing, we will handle below
     echo "$RESULT"
   else
+    echo "ERROR"
     echo "$RESULT"
     exit 1
   fi
 fi
 
 # this case should only be entered if creation fails or if an instance already exists
-echo "An activity tracker instance already exists in the $REGION region".
+echo "An activity tracker instance already exists in the $REGION region"
 
 RESULT=$(curl -s -X GET "https://resource-controller.cloud.ibm.com/v2/resource_instances?type=service_instance&resource_id=$ACTIVITY_TRACKER_CATALOG_ID" \
     --header "Authorization: Bearer $IAM_TOKEN" \
@@ -108,3 +110,4 @@ INSTANCE="$(echo "$RESULT" | jq ".resources[] | select( .region_id | contains(\"
 echo $INSTANCE > creation-output.json
 
 echo $INSTANCE
+
