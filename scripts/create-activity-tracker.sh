@@ -80,8 +80,9 @@ if [[ ! "$REGIONS" == *"$REGION"* ]]; then
     --header 'Content-Type: application/json')
 
   http_code=$(tail -n1 <<< "$RESULT")  # get the last line
-  RESULT=$(sed '$ d' <<< "$RESULT")   # get all but the last line which contains the status code
+  RESU
 
+  echo "http status: $http_code"
   if [[ ! "$http_code" == "20"* ]]; then
     # this handles success (200, 201, 202) response code
     echo "$RESULT"
