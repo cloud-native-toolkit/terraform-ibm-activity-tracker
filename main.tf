@@ -30,6 +30,7 @@ resource null_resource at_instance {
   triggers = {
     INSTANCE_NAME = local.name
     SERVICE = local.service
+    PLAN = var.plan
     ACTIVITY_TRACKER_CATALOG_ID = local.service_catalog_id
     IBMCLOUD_API_KEY = base64encode(var.ibmcloud_api_key)
     REGION = var.resource_location
@@ -44,6 +45,7 @@ resource null_resource at_instance {
     environment = {
       INSTANCE_NAME = self.triggers.INSTANCE_NAME
       SERVICE = self.triggers.SERVICE
+      PLAN = self.triggers.PLAN
       ACTIVITY_TRACKER_CATALOG_ID = self.triggers.ACTIVITY_TRACKER_CATALOG_ID
       IBMCLOUD_API_KEY = base64decode(self.triggers.IBMCLOUD_API_KEY)
       REGION = self.triggers.REGION

@@ -35,28 +35,15 @@ do
   url=$(echo "$RESULT" | jq '.next_url' -r )
 done
 
-if [[ "$REGIONS" == *"$REGION"* ]]; then
-  echo "An activity tracker instance already exists in the $REGION region".
-
-  RESULT=$(curl -s -X GET "https://resource-controller.cloud.ibm.com/v2/resource_instances?type=service_instance&resource_id=$ACTIVITY_TRACKER_CATALOG_ID" \
-      --header "Authorization: Bearer $IAM_TOKEN" \
-      --header 'Content-Type: application/json')
-
-  INSTANCE="$(echo "$RESULT" | jq ".resources[] | select( .region_id | contains(\"$REGIONS\") )" -r)"
-
-  echo $INSTANCE > creation-output.json
-
-  echo $INSTANCE
-
-else
+if [[ ! "$REGIONS" == *"$REGION"* ]]; then
   PLANS=$(curl -s -X GET \
     --url "https://globalcatalog.cloud.ibm.com/api/v1/$ACTIVITY_TRACKER_CATALOG_ID/*?include=metadata.plan" \
     --header "Authorization: Bearer $IAM_TOKEN" \
     --header 'Content-Type: application/json')
 
-  PLAN_ID=$(echo "$PLANS" | jq '.resources[] | select(.name=="7-day").id' -r)
+  PLAN_ID=$(echo "$PLANS" | jq '.resources[] | select(.name=="'$PLAN'").id' -r)
 
-  RESULT=$(curl -s -X POST https://resource-controller.cloud.ibm.com/v2/resource_instances \
+  RESULT=$(curl -s -w "%{http_code}" -X POST https://resource-controller.cloud.ibm.com/v2/resource_instances \
     -d '{
       "name": "'$INSTANCE_NAME'",
       "target": "'$REGION'",
@@ -67,9 +54,32 @@ else
     --header "Authorization: Bearer $IAM_TOKEN" \
     --header 'Content-Type: application/json')
 
-  echo "$RESULT"
+  http_code=$(tail -n1 <<< "$RESULT")  # get the last line
+  RESULT=$(sed '$ d' <<< "$RESULT")   # get all but the last line which contains the status code
 
-  echo "$RESULT" > creation-output.json
-
-
+  if [[ ! "$http_code" == "20"* ]]; then
+    # this handles success (200, 201, 202) response code
+    echo "$RESULT"
+    echo "$RESULT" > creation-output.json
+    exit 0
+  elif [[ "$RESULT" == *"This region already has an instance"* ]]; then
+    #do nothing, we will handle below
+    echo "$RESULT"
+  else
+    echo "$RESULT"
+    exit 1
+  fi
 fi
+
+# this case should only be entered if creation fails or if an instance already exists
+echo "An activity tracker instance already exists in the $REGION region".
+
+RESULT=$(curl -s -X GET "https://resource-controller.cloud.ibm.com/v2/resource_instances?type=service_instance&resource_id=$ACTIVITY_TRACKER_CATALOG_ID" \
+    --header "Authorization: Bearer $IAM_TOKEN" \
+    --header 'Content-Type: application/json')
+
+INSTANCE="$(echo "$RESULT" | jq ".resources[] | select( .region_id | contains(\"$REGION\") )" -r)"
+
+echo $INSTANCE > creation-output.json
+
+echo $INSTANCE
