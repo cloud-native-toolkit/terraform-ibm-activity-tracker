@@ -67,7 +67,7 @@ if [[ ! "$REGIONS" == *"$REGION"* ]]; then
   fi
 fi
 
-# this case should only be entered if creation fails
+# this case should only be entered if creation fails or if an instance already exists
 echo "An activity tracker instance already exists in the $REGION region".
 
 RESULT=$(curl -s -X GET "https://resource-controller.cloud.ibm.com/v2/resource_instances?type=service_instance&resource_id=$ACTIVITY_TRACKER_CATALOG_ID" \
