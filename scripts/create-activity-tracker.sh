@@ -54,7 +54,7 @@ if [[ ! "$REGIONS" == *"$REGION"* ]]; then
     --header "Authorization: Bearer $IAM_TOKEN" \
     --header 'Content-Type: application/json')
 
-  if [[ ! "$http_response" == "20"* ]]; then
+  if [[ ! "$http_code" == "20"* ]]; then
     # this handles success (200, 201, 202) response code
     echo "$RESULT"
     echo "$RESULT" > creation-output.json
