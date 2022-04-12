@@ -6,6 +6,30 @@ PATH=$BIN_DIR:$PATH
 JQ="$BIN_DIR/jq"
 
 
+SEMAPHORE="activity-tracker.semaphore"
+
+while true; do
+  echo "Checking for semaphore"
+  if [[ ! -f "${SEMAPHORE}" ]]; then
+    echo -n "ActivityTracker $REGION" > "${SEMAPHORE}"
+
+    if [[ $(cat ${SEMAPHORE}) == "ActivityTracker $REGION" ]]; then
+      echo "Got the semaphore. Creating activity tracker instance"
+      break
+    fi
+  fi
+
+  SLEEP_TIME=$((1 + $RANDOM % 10))
+  echo "  Waiting $SLEEP_TIME seconds for semaphore"
+  sleep $SLEEP_TIME
+done
+
+function finish {
+  rm "${SEMAPHORE}"
+}
+
+trap finish EXIT
+
 
 IAM_TOKEN=$(curl -s -X POST "https://iam.cloud.ibm.com/identity/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
