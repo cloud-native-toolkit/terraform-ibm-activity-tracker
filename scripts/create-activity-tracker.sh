@@ -54,13 +54,17 @@ if [[ ! "$REGIONS" == *"$REGION"* ]]; then
     --header "Authorization: Bearer $IAM_TOKEN" \
     --header 'Content-Type: application/json')
 
+  http_code=$(tail -n1 <<< "$RESULT")  # get the last line
+  RESULT=$(sed '$ d' <<< "$RESULT")   # get all but the last line which contains the status code
+
   if [[ ! "$http_code" == "20"* ]]; then
     # this handles success (200, 201, 202) response code
     echo "$RESULT"
     echo "$RESULT" > creation-output.json
     exit 0
-  elif [[ ! "$RESULT" == *"This region already has an instance"* ]; then
+  elif [[ "$RESULT" == *"This region already has an instance"* ]]; then
     #do nothing, we will handle below
+    echo "$RESULT"
   else
     echo "$RESULT"
     exit 1
