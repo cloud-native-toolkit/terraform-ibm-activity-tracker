@@ -5,6 +5,12 @@ resource null_resource print_names {
   }
 }
 
+resource null_resource wait_for_sync {
+  provisioner "local-exec" {
+    command = "echo 'Sync: ${var.sync != null ? var.sync : ""}'"
+  }
+}
+
 data ibm_resource_group resource_group {
   depends_on = [null_resource.print_names]
 
