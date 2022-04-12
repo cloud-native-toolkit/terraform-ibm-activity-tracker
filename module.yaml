@@ -1,6 +1,8 @@
 name: ibm-activity-tracker
 type: terraform
 description: Provisions the IBM Cloud hosted Activity Tracker service
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#sync
 tags:
     - sre
     - account
