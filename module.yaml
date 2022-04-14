@@ -1,4 +1,5 @@
 name: ibm-activity-tracker
+registryId: cloud-native-toolkit/activity-tracker/ibm
 type: terraform
 description: Provisions the IBM Cloud hosted Activity Tracker service
 interfaces:
