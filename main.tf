@@ -19,7 +19,6 @@ data ibm_resource_group resource_group {
 
 module "clis" {
   source = "cloud-native-toolkit/clis/util"
-  version = "1.9.5"
 }
 
 resource "random_uuid" "tag" {
