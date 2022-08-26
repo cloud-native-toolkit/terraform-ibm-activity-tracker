@@ -45,7 +45,6 @@ module "dev_activity-tracker" {
   resource_group_name = var.resource_group_name
   resource_location   = var.region
   tags                = []
-  name_prefix         = var.name_prefix
   plan                = "7-day"             
 }
 ```
