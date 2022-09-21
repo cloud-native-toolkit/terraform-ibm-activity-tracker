@@ -17,8 +17,7 @@ data ibm_resource_group resource_group {
   name = var.resource_group_name
 }
 
-module "clis" {
-  source = "cloud-native-toolkit/clis/util"
+data clis_check clis {
 }
 
 resource "random_uuid" "tag" {
@@ -31,7 +30,7 @@ locals {
 }
 
 resource null_resource at_instance {
-  depends_on = [null_resource.print_names, module.clis]
+  depends_on = [null_resource.print_names]
 
   triggers = {
     INSTANCE_NAME = local.name
@@ -42,7 +41,7 @@ resource null_resource at_instance {
     REGION = var.resource_location
     RESOURCE_GROUP_ID  = data.ibm_resource_group.resource_group.id
     AUTOMATION_TAG  = "automation:${random_uuid.tag.result}"
-    BIN_DIR = module.clis.bin_dir
+    BIN_DIR = data.clis_check.clis.bin_dir
   }
 
   provisioner "local-exec" {

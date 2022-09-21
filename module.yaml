@@ -13,6 +13,8 @@ versions:
   providers:
     - name: ibm
       source: "ibm-cloud/ibm"
+    - name: clis
+      source: "cloud-native-toolkit/clis"
   dependencies:
     - id: resource_group
       refs:
