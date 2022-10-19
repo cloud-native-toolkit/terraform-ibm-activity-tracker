@@ -18,7 +18,7 @@ jobs:
   verify:
     if: ${{ !contains( github.event.pull_request.labels.*.name, 'skip ci' ) }}
     runs-on: ubuntu-latest
-    container: quay.io/ibmgaragecloud/cli-tools:v0.15
+    container: quay.io/cloudnativetoolkit/terraform:v1.2
 
     strategy:
       matrix:
@@ -28,6 +28,7 @@ jobs:
 
     env:
       HOME: /home/devops
+      TF_LOG_PROVIDER: DEBUG
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
